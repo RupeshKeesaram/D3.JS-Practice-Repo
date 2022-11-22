@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG BASICS PART 3</title>
+    <style>
+        svg{
+            background-color: pink;
+        }
+
+        circle,rect{
+            fill:red;
+            stroke:blue;
+            stroke-width: 2px;
+        }
+
+        g{
+            transform: scale(1,2);
+        }
+    </style>
+</head>
+<body>
+    <svg width="700px" height="700px">
+
+        <!-- Creating a group using <g></g> tag -->
+        <!-- When we have multiple elements where we want to apply  -->
+        <!-- transformations at a time, then we can group them together -->
+
+        <g>
+            <!-- circle -->
+            <circle cx="100" cy="100" r="50"></circle>
+
+            <!-- rectangle -->
+
+            <rect x="250" y="250" width="100" height="50"></rect>
+        </g>
+    </svg>
+</body>
+</html>
