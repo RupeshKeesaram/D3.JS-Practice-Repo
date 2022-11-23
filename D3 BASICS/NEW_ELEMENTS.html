@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+     <!-- D3 CDN -->
+     <script src="https://d3js.org/d3.v7.min.js"></script>
+
+    <title>ADDING NEW ELEMENTS USING D3</title>
+</head>
+<body>
+    <button onclick="addElement();">Add Element</button>    
+    <div id="parent">
+        <p>First Paragraph</p>
+        <p>Second Paragraph</p>
+        <p>Third Paragraph</p>
+    </div>
+
+    <script>
+        function addElement(){
+            // d3.select("#parent").append("p").text("Hello I am the last").style("color","green");
+
+            d3.select("#parent").insert("p","p:nth-child(2)").text("I added in between").style("color","green");
+
+            d3.selectAll("#parent").insert("p","p:nth-last-child(1)").text("Added from rear end").style("color","green");
+        }
+    </script>
+</body>
+</html>

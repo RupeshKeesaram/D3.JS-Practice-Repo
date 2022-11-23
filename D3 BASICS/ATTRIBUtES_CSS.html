@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- !-- D3 CDN -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <title>DEALING WITH CSS ATTRIBUTES USING D3</title>
+</head>
+<body>
+    <button onclick="changeSize()">Change</button>
+    <input type="checkbox" name="checkbox" id="check">
+    <button onclick="undoChanges()">Undo</button>
+    <br/><br/>
+    <svg width="800" height="600">
+        <circle cx="50" cy="50" r="40"></circle>
+        <circle cx="140" cy="50" r="40"></circle>
+        <circle cx="230" cy="50" r="40"></circle>
+        <circle cx="320" cy="50" r="40"></circle>
+    </svg>
+    <script>
+
+        function changeSize()
+        {
+
+            // cx,xy,width, etc are some of the examples for attributes
+
+            // d3.selectAll("circle").attr("r","20");
+
+
+            // d3.selectAll("circle").attr("r",()=>{
+            //     return Math.random()*40;
+            // });
+
+            d3.selectAll("circle").attr("cy",(d,i)=>{
+               return i*90;
+            });
+
+            d3.select("input[type=checkbox]").attr("checked",true);
+
+            // checked,unchecked,selected are some of the examples for properties
+
+        }
+
+        function undoChanges(){
+            d3.selectAll("circle").attr("cy",50);
+            d3.select("input[type=checkbox]").attr("checked",false);
+        }
+    </script>
+</body>
+</html>

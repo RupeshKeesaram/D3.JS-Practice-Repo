@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- D3 CDN -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
+    <title>CSS SELECTORS USING D3</title>
+</head>
+<body>
+    <div id="container">
+        <span>First Span</span>
+        <p>First Paragraph</p>
+        <p>Second Paragraph</p>
+        <p>Third Paragraph</p>
+        <span>Second Span</span>
+        <p>This is about <span id="inside">Selections</span></p>
+    </div>
+    <script>
+        // d3.select("div").style("color","red");
+        // d3.selectAll("p").style("color","green");
+        // d3.select("p:nth-child(2)").style("color","blue"); 
+
+        // d3.select("#inside").style("color","red");
+        d3.select("span:first-child").style("background","blue");
+    </script>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- D3 CDN -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
+
+    <title>Adding classes to the selected elements</title>
+
+    <style>
+        .btns{
+            display: inline;
+        }
+
+        button{
+            color:black;
+            background-color: gray;
+            outline: 0.5px solid black;
+        }
+
+        .colorChange
+        {
+            stroke:indigo;
+            fill:deeppink;
+            stroke-width:4;
+        }
+
+        .boxes
+        {
+            width:100px;
+            height:100px;
+            border:3px solid black;
+            background: pink;
+            float: left;
+            margin:10px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="btns">
+        <button onclick="changeColor()">Change</button>
+        <button onclick="restoreColor()">Back</button>
+    </div>
+
+    <br/><br/>
+    <svg width="600" height="200">
+        <circle cx="50" cy="50" r="40"></circle>
+        <circle cx="140" cy="50" r="40"></circle>
+        <circle cx="230" cy="50" r="40"></circle>
+        <circle cx="320" cy="50" r="40"></circle>
+    </svg>
+
+    <br/><br/>
+
+    <button onclick="addBoxes();">Add</button>
+    <br/><br/>
+    <div id="parent">
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+
+    <script>
+
+        //  function to change color 
+        function changeColor()
+        {
+            // d3.selectAll("circle").style("fill","green");
+            d3.selectAll("circle").classed("colorChange",true);
+        }
+
+
+        // function to restore color
+        function restoreColor()
+        {
+            // d3.selectAll("circle").classed("colorChange",false);
+            d3.selectAll("circle").classed("colorChange",(d,i)=>{
+                if(i%2==0)
+                {
+                    return true;
+                }
+                else false;
+            })
+        }
+
+        function addBoxes()
+        {
+            d3.selectAll("#parent>div").classed("boxes",true);
+        }
+    </script>
+</body>
+</html>
