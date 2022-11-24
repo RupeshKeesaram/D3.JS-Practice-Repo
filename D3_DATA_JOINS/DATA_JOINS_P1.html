@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- !-- D3 CDN -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
+    <title>DATA JOINS PART 1</title>
+
+    <style>
+        .changeColor
+         {
+             background: deeppink;
+             color:indigo;
+             width:50px;
+         }
+    </style>
+</head>
+<body>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <script>
+        var arr = [10,23,4,5,45,78]
+        // var svgContainer = d3.select("body").append("svg").attr("width",400).attr("height",400).style("background","grey").style("opacity",0.5);
+
+        // d3.selectAll("p").data(arr).text("Rupee");
+        d3.selectAll("p").data(arr).text((d)=>{return d}).style("font-size",(d)=>{return 2*d}).classed("changeColor",(d)=>{
+            return d>20
+        });
+
+    </script>
+</body>
+</html>

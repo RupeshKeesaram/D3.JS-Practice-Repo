@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+     <!-- !-- D3 CDN -->
+     <script src="https://d3js.org/d3.v7.min.js"></script>
+
+    <title>DATA JOINS CORE </title>
+
+    <style>
+
+        .pStyle{
+            width: 100px;
+            background-color: lightgreen;
+            color: blue;
+            border: 2px solid red;
+        }
+    </style>
+</head>
+<body>
+    <!-- DATA JOINS in v7 is different from v5 which is inturn different from v3 -->
+
+    <!-- Update (Data Points == Elements) -->
+    <!-- <p></p>
+    <p></p>
+    <p></p>
+    <p></p> -->
+
+
+    <!-- Enter ( Data points > Elements)
+    <p></p>
+    <p></p> -->
+
+
+    <!-- Exit (Data Points < Elements) -->
+    <!-- <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p> -->
+
+
+    <script>
+
+        var myData = [12,45,67,89];
+
+        // By default update will be performed, below is the example for update
+        // d3.selectAll("p").data(myData).text((d)=>{return d;}).classed("pStyle",true);  
+        
+        // Example for enter  (V5 Example)
+
+        /* var update = d3.selectAll("p").data(myData);
+        update.enter().append("p").merge(update).text((d)=>{return d;}).classed("pStyle",true); */
+
+        // Example for exit (V5)
+
+        /* var update = d3.selectAll("p").data(myData);
+        update.exit().remove();
+        update.text((d)=>{return d;}).classed("pStyle",true); */
+
+
+        // Enter, exit, update using joins 
+
+    
+//     d3.select("body").selectAll("p").data(myData).join(
+//     function(enter) {
+//         return enter
+//         .append('p')
+//         .style('opacity', 1);
+//     },
+//     function(update) {
+//         return update
+//         .style('opacity', 1);
+//     },
+//     function(exit) {
+//         return exit.remove();
+//     }
+// ).text((d)=>{return d;}).classed("pStyle",true);
+
+
+
+// ENTER,EXIT,UPDATE using d3 Joins 
+// we are actually trying to build svg from scratch
+var svgContainer = d3.select("body").append("svg").attr("width",600).attr("height",600).style("stroke","red").style("background","pink").style("stroke-width",2);
+
+svgContainer.selectAll("circle").data(myData).join(
+    function(enter){
+        return enter.append("circle").style("opacity",1);
+    },
+    function(update)
+    {
+        return update.style("Opacity",1);
+    },
+    function(exit){
+        return exit.remove();
+    }).attr('cx', function(d, i) {
+      return (i+1) * 100;
+    }).attr("cy",100).attr("r",20);
+
+    </script>
+</body>
+</html>

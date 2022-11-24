@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- !-- D3 CDN -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
+
+    <title>Vertical Bar Graph using D3</title>
+</head>
+<body>
+    <script>
+
+        var myData = [10,15,20,25,30,35];
+        var svg = d3.select("body").append("svg").attr("width",800).attr("height",500).style('background',"pink");
+
+        svg.selectAll("rect").data(myData).join(
+            function(enter){
+                return enter.append("rect").style("opacity",0.5);
+            },
+            function(update){
+                return update.style("opacity",1);
+            },
+            function(exit){
+                return exit.remove();
+            }
+        ).attr("width",20)
+         .attr("height",(d)=>{return 10*d;})
+         .attr("x",(d,i)=>{return (i+1)*30})
+         .attr("y",(d)=>{return 500-10*d;})
+         .style("fill","green");
+
+
+         data = svg.selectAll("text").data(myData).enter().append("text").text((d)=>{return d;}).attr("x",(d,i)=>{return (i+1)*30}).attr("y",(d)=>{return 490-10*d;});
+
+    </script>
+</body>
+</html>

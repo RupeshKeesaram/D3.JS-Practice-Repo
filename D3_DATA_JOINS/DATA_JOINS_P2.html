@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- !-- D3 CDN -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
+    <title>DATA JOINS USING JSON</title>
+  </head>
+
+  <body>
+    <svg width="800px" height="600px">
+      <circle></circle>
+      <circle></circle>
+      <circle></circle>
+      <circle></circle>
+      <circle></circle>
+    </svg>
+    <script>
+
+      var myDetails = [
+        { radius: 20, x: 50, y: 50, color: "red" },
+        { radius: 25, x: 150, y: 50, color: "deeppink" },
+        { radius: 30, x: 250, y: 50, color: "indigo" },
+        { radius: 35, x: 350, y: 50, color: "pink" },
+        { radius: 40, x: 450, y: 50, color: "green" },
+      ];
+
+      d3.selectAll("circle")
+        .data(myDetails)
+        .attr("r", (d,i) => {
+          return d.radius;
+        })
+        .attr("cy", (d) => {
+          return d.y;
+        })
+        .attr("cx", (d) => {
+          return d.x;
+        })
+        .style("fill", (d) => {
+          return d.color;
+        });
+    </script>
+  </body>
+</html>
