@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- !-- D3 CDN -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
+
+    <title>Horizontal Bar Graph using D3</title>
+</head>
+<body>
+    <script>
+
+        // var myData = [10,15,20,25,30,35,80];
+        var myData1 = [100,1000,10000,100000,1000000,10000000]
+        var svg = d3.select("body").append("svg").attr("width",800).attr("height",500).style('background',"pink");
+
+        // Power Scale
+        // var powerScale = d3.scalePow().exponent(2).domain([d3.min(myData)-20,d3.max(myData)+20]).range([0,100]);
+
+        
+        var logScale = d3.scaleLog().base(2).domain([d3.min(myData1)-20,d3.max(myData1)+20]).range([0,100]);
+         // ColorScale
+         var colorScale = d3.scaleLinear().domain([d3.min(myData1)-5,d3.max(myData1)+5])
+                            .range(["red","blue","green"]);
+
+        svg.selectAll("rect").data(myData1).join(
+            function(enter){
+                return enter.append("rect").style("opacity",0.5);
+            },
+            function(update){
+                return update.style("opacity",1);
+            },
+            function(exit){
+                return exit.remove();
+            }
+        ).attr("width",(d)=>{return logScale(d)})
+         .attr("height",30)
+         .attr("x",10)
+         .attr("y",(d,i)=>{return (i+1)*40;})
+         .style("fill",(d)=>{return colorScale(d)});
+
+
+         data = svg.selectAll("text").data(myData1).enter().append("text").text((d)=>{return d;}).attr("x",(d)=>{return 15+logScale(d)}).attr("y",(d,i)=>{return 20+(i+1)*40;});
+
+
+    </script>
+</body>
+</html>

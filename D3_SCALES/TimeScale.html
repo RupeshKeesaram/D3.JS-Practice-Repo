@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- !-- D3 CDN -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
+
+    <title>Horizontal Bar Graph using D3</title>
+</head>
+<body>
+    <script>
+
+        var details= [{"date":"2017-06-30", "tax": 20000},{"date":"2017-09-30", "tax": 10000},{"date":"2017-12-31", "tax": 30000},{"date":"2018-03-31", "tax": 15000}]; 
+
+
+        var startDate = d3.min(details, function(d){return new Date(d.date);});
+        var endDate = d3.max(details, function(d){return new Date(d.date);});
+        var timeScale = d3.scaleTime()
+                        .domain([startDate, endDate])
+                        .range([100, 800-40]);
+
+        var linearScale = d3.scaleSequential().domain([0,5]).interpolator(d3.interpolateRainbow);
+        var svg = d3.select("body").append("svg").attr("width",1000).attr("height",500).style('background',"pink");
+
+        
+        svg.selectAll("rect").data(details).join(
+            function(enter){
+                return enter.append("rect").style("opacity",0.5);
+            },
+            function(update){
+                return update.style("opacity",1);
+            },
+            function(exit){
+                return exit.remove();
+            }
+        ).attr("width",(d)=>{return timeScale(new Date(d.date))})
+         .attr("height",30)
+         .attr("x",10)
+         .attr("y",(d,i)=>{return (i+1)*40;})
+         .style("fill",(d,i)=>{return linearScale(i)});
+
+
+         data = svg.selectAll("text").data(details).enter().append("text").text((d)=>{return d.date;}).attr("x",(d)=>{return 15+ timeScale(new Date(d.date))}).attr("y",(d,i)=>{return 20+(i+1)*40;});
+
+
+    </script>
+</body>
+</html>

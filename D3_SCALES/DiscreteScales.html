@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- !-- D3 CDN -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
+
+    <title>Horizontal Bar Graph using D3</title>
+</head>
+<body>
+
+    
+    <script>
+
+        var quantizeData = [100, 15, 26, 39, 51, 57, 63, 79, 82, 99];
+        var quantileData = [100, 220, 2650, 39689, 51485, 576892, 633402, 7965320, 8269467, 99568235];
+        var thresholdData = [-67, 2, 9, 125, 550, 6200, 9853, 13678, 5862303, 96587983];
+        var colors = ["red","yellow","blue","green"];
+
+        var linearScale = d3.scaleLinear().domain([d3.min(quantizeData)-50,d3.max(quantizeData)]).range([0,300-50]);
+
+        // QuantizeScale is for continuous data & discrete range
+        var quantizeScale = d3.scaleQuantize().domain([d3.min(quantizeData),d3.max(quantizeData)]).range(colors);
+
+        // QuantileScale domain expects whole data & range will be discrete.
+        var quantileScale = d3.scaleQuantile().domain(quantileData).range(colors);
+
+        // ThresholdScale domain expects threshold values & range will be discrete.
+        var thresholdScale = d3.scaleThreshold().domain([0,10,100,1000,10000,100000,10000000]).range(colors);
+
+
+        var svg = d3.select("body").append("svg").attr("width",800).attr("height",500).style('background',"pink");
+        var circles = svg.selectAll("circle");
+
+    
+        // Coloring using Quantize scale
+        circles.data(quantizeData).enter().append("circle")
+                    .attr("cx",(d,i)=>{return (i+1)*45})
+                    .attr("cy",100)
+                    .attr("r",20)
+                    .style("fill",(d)=>{return quantizeScale(d)});
+
+
+        // Coloring using QunatileScale
+        circles.data(quantileData).enter().append("circle")
+                    .attr("cx",(d,i)=>{return (i+1)*45})
+                    .attr("cy",250)
+                    .attr("r",20)
+                    .style("fill",(d)=>{return quantileScale(d)});
+
+        // Coloring using ThresholdScale
+        circles.data(thresholdData).enter().append("circle")
+                    .attr("cx",(d,i)=>{return (i+1)*45})
+                    .attr("cy",400)
+                    .attr("r",20)
+                    .style("fill",(d)=>{return thresholdScale(d)});
+
+        // data = svg.selectAll("text").data(details).enter().append("text").text((d)=>{return d;}).attr("x",(d)=>{return 15+linearScale(d)}).attr("y",(d,i)=>{return 20+(i+1)*40;});
+
+
+    </script>
+</body>
+</html>

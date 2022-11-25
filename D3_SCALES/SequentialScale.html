@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- !-- D3 CDN -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
+
+    <title>Horizontal Bar Graph using D3</title>
+</head>
+<body>
+    <script>
+
+        var myData = [10,15,20,25,30,35,80];
+        var svg = d3.select("body").append("svg").attr("width",800).attr("height",500).style('background',"pink");
+
+        // linear scale 
+        var linearScale = d3.scaleLinear().domain([d3.min(myData)-5,d3.max(myData)+5])
+                            .range([0,500]);
+
+    
+        // sequential scales will be mostly used for colorscaling ( where we get continuous output for continuous data )
+         var colorScale = d3.scaleSequential().domain([d3.min(myData)-5,d3.max(myData)+5])
+                            .interpolator(d3.interpolateRainbow);
+
+        var colorScale2 = d3.scaleSequential().domain([d3.min(myData)-5,d3.max(myData)+5])
+                            .interpolator(d3.interpolateCool);
+
+        var colorScale3 = d3.scaleSequential().domain([d3.min(myData)-5,d3.max(myData)+5])
+                            .interpolator(d3.interpolateWarm);
+
+
+        svg.selectAll("rect").data(myData).join(
+            function(enter){
+                return enter.append("rect").style("opacity",0.5);
+            },
+            function(update){
+                return update.style("opacity",1);
+            },
+            function(exit){
+                return exit.remove();
+            }
+        ).attr("width",(d)=>{return linearScale(d)})
+         .attr("height",30)
+         .attr("x",10)
+         .attr("y",(d,i)=>{return (i+1)*40;})
+         .style("fill",(d)=>{return colorScale3(d)});
+
+
+         data = svg.selectAll("text").data(myData).enter().append("text").text((d)=>{return d;}).attr("x",(d)=>{return 15+linearScale(d)}).attr("y",(d,i)=>{return 20+(i+1)*40;});
+
+
+    </script>
+</body>
+</html>
