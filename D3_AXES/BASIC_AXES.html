@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- !-- D3 CDN -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
+
+    <title>Basic Axes Using D3</title>
+</head>
+<body>
+
+    
+    <script>
+
+        // creating linear scales for X & Y axis
+        var xScale = d3.scaleLinear().domain([0,100]).range([0,480]);
+        var yScale = d3.scaleLinear().domain([0,100]).range([480,0]);
+
+        // creating Axis by leveraging the scales.
+        var xAxis = d3.axisBottom(xScale);
+        var yAxis = d3.axisLeft(yScale);
+
+        //  adding svg to the body element
+        var svg = d3.select("body").append("svg").attr("width",500).attr("height",500).style("background","lightgreen");
+
+        // appending a group to svg for adding axis
+        svg.append("g").attr("transform","translate(10,470)").call(xAxis);
+        svg.append("g").attr("transform","translate(30,10)").call(yAxis);
+
+    </script>
+</body>
+</html>

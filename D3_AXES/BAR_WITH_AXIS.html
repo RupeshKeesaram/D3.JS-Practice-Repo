@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- !-- D3 CDN -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
+
+    <title>Top Left Bottom Right Axes Using D3</title>
+
+    <style>
+        .container{
+            display: flex;
+            margin: 5px;
+            padding:20px;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .add{
+            stroke:"red";
+            stroke-width: 5px;
+            
+        }
+    </style>
+</head>
+<body>
+    <script>
+        var data = [{"year":2010,"tax":1200},{"year":2011,"tax":1400},{"year":2012,"tax":1000},{"year":2013,"tax":1800},{"year":2014,"tax":2000}]
+
+        var width=800, height=500, spaccing=100;
+
+        var minTax = d3.min(data,(d)=>{return d.tax});
+        var maxTax = d3.max(data,(d)=>{return d.tax});
+
+        var minYear = d3.min(data,(d)=>{return d.year});
+        var maxYear = d3.max(data,(d)=>{return d.year});
+
+
+        // creating linearScales for axes 
+        var xScale = d3.scaleLinear().domain([minYear,maxYear]).range([0,width-spaccing]);
+        var yScale = d3.scaleLinear().domain([minTax-100,maxTax]).range([height-spaccing,0]);
+
+        var xAxis = d3.axisBottom(xScale).ticks(5).tickFormat((d)=>{return d});
+        var yAxis = d3.axisLeft(yScale).tickFormat((d)=>{return "$"+d});
+
+        var svg = d3.select("body").append("svg").attr("width",width)
+                                    .attr("height",height)
+                                    .style("background","lightgreen")
+                                    .append("g").classed("main",true).attr("transform","translate("+spaccing/2+","+spaccing/2+")");
+
+        // svg.append("g").attr("transform","translate(0,"+height-spaccing+")").call(xAxis);
+        svg.append("g").attr("transform","translate(30,"+(height-spaccing)+")").call(xAxis);
+
+        svg.append("g").attr("transform","translate(0,0)").call(yAxis);
+
+        svg.selectAll("rect").data(data).enter().append("rect")
+                            .attr("width",20)
+                            .attr("height",(d)=>{return (height-spaccing)-yScale(d.tax)})
+                            .attr("x",(d)=>{return 20+xScale(d.year)})
+                            .attr("y",(d)=>{return yScale(d.tax)})
+                            .style("fill","red");
+
+        // Line to add X & Y axis
+        svg.append("line").attr("x1",0).attr("x2",30).attr("y1",400).attr("y2",400).style("stroke","black");
+        // svg.append("path").attr("d","M0 400 h30 v2").classed("add",true);
+    </script>
+</body>
+</html>

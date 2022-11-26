@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- !-- D3 CDN -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
+
+    <title>Styling Of Basic Axes Using D3</title>
+</head>
+<body>
+
+    
+    <script>
+        var height=500,width=500,spacing = 60;
+        // creating linear scales for X & Y axis
+        var xScale = d3.scaleLinear().domain([0,100]).range([0,width-spacing]);
+        var yScale = d3.scaleLinear().domain([0,100]).range([height-spacing,0]);
+
+        // creating Axis by leveraging the scales.
+        // by mutating ticks we can specify number of ticks we want
+        /* There are lot more functions available that we can manupulate to style for example tickSizeOuter(size), tickSizeInner(size) for sizing the outer & Inner ticks. We can go with the general one if required i.e tickSize(size). tickPadding() for adding more padding between ticks*/
+        var xAxis = d3.axisBottom(xScale).ticks(5).tickFormat((d)=>{return d+"%"});
+        var yAxis = d3.axisLeft(yScale).ticks(5).tickPadding(5).tickSizeOuter(10);
+
+        //  adding svg to the body element
+        var svg = d3.select("body").append("svg").attr("width",width).attr("height",height).style("background","lightgreen").append("g")
+                    .attr("transform", "translate(" + spacing/2 + "," + spacing/2 + ")");
+
+        // appending a group to svg for adding axis
+        svg.append("g").attr("transform","translate(0,"+(height-spacing)+")").call(xAxis);
+        svg.append("g").attr("transform","translate(0,0)").call(yAxis);
+
+    </script>
+</body>
+</html>
