@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- !-- D3 CDN -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
+
+    <title>Horizontal Bar Graph using D3</title>
+</head>
+<body>
+
+    
+    <script>
+        var myData = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
+
+        var linearScale = d3.scaleLinear().domain([0,26]).range([0,500]);
+
+        //  ordinal scale will provide discrete values for our data ( colors will be applied in round-robin fashion )
+        var ordinalScale = d3.scaleOrdinal().domain(myData).range(["red","blue","green","yellow"]);
+
+        var svg = d3.select("body").append("svg").attr("width",500).attr("height",500).style("background","pink");
+
+        var text = svg.selectAll("text");
+
+        text.data(myData).enter().append("text").text((d)=>{return d;}).attr("x",(d,i)=>{return linearScale(i)}).attr("y",200).style("fill",(d)=>{return ordinalScale(d)});
+    </script>
+</body>
+</html>
