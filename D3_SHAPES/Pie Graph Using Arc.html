@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- !-- D3 CDN -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
+    <title>Arcs Using D3</title>
+</head>
+
+<body>
+    <script>
+        var data = [
+            { day: "Mon", startAngle: 0, endAngle: 0.9 },
+            { day: "Tue", startAngle: 0.9, endAngle: 2.4 },
+            { day: "Wed", startAngle: 2.4, endAngle: 4.2 },
+            { day: "Thu", startAngle: 4.2, endAngle: 5 },
+            { day: "Fri", startAngle: 5, endAngle: 6.28 },
+        ];
+
+        var width = 1000, height = 600;
+        var margin = { left: 30, right: 30, top: 30, bottom: 30 };
+
+        var colorScale = d3.scaleOrdinal().domain(Object.keys(data))
+            .range(["red", "blue", "green", "yellow", "orange"]);
+
+        var svg = d3.select("body").append("svg")
+            .attr("width", `${width - margin.left - margin.right}`)
+            .attr("height", `${height - margin.top - margin.bottom}`)
+            .style("background", "pink");
+
+
+        var svg_g = svg.append("g").attr("transform", "translate(" + `${margin.left + margin.right}` + "," + `${margin.top + margin.bottom}` + ")");
+
+
+        // var arc = d3.arc()({innerRadius:"0",outerRadius:"50",startAngle:"3.14",endAngle:"6.28"});
+        // svg_g.append("path").attr("d",arc);
+
+
+        // defining arc's style ( arc padding, radius and all )
+        var segment = d3.arc()
+            .innerRadius(0)
+            .outerRadius(200)
+            .padAngle(.05)
+            .padRadius(30)
+            .cornerRadius(3);
+
+
+        // var segment = d3.arc()
+        //     .innerRadius(0)
+        //     .outerRadius(200);
+
+
+        var pie = svg_g.append("g").attr("transform", "translate(300,200)")
+            .selectAll("path").data(data)
+            .enter().append("path")
+            .attr("d", segment)
+            .attr("fill", (d) => { return colorScale(d.day); })
+            .on("mouseover", (e, d) => {
+                var samp = d3.arc()
+                    .innerRadius(0)
+                    .outerRadius(250)
+                    .padRadius(0.5)
+                    .padAngle(50)
+                    .cornerRadius(5);
+
+                var ele = d3.select(e.target);
+                ele.transition().duration(500).attr("d",samp).attr("fill", "white")
+                console.log("mouseover");
+            })
+            .on("mouseout", (e, d) => {
+                var ele = d3.select(e.target);
+                ele.transition().duration(500).attr("d", segment).attr("fill", (d) => { return colorScale(d.day); });
+                console.log("mouseout")
+            });
+
+
+        var content = svg_g.selectAll("text").data(data);
+        content.enter().append("text").each(function (d) {
+            var center = segment.centroid(d);
+            d3.select(this).attr("x", center[0]).attr("y", center[1]).attr("dx", "-10px").text(d.day).attr("transform", "translate(300,200)");
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- !-- D3 CDN -->
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <title>Scatter Plot Using d3.js</title>
+</head>
+<body>
+  <div class="bg-red-100 space-y-5 text-center py-5">
+    <label htmlFor="csvInput" class="text-center font-serif">
+      Upload A CSV File
+    </label>
+    <input class="rounded-md pl-10 font-serif"
+      onChange={handleFileChange}
+      id="csvInput"
+      name="file"
+      type="File"
+    />
+    <div>
+      <button onClick={handleParse} class="bg-blue-400 pl-2 pr-2 rounded-md">Parse</button>
+    </div>
+  </div>
+    <script>
+      
+    </script>
+  </body>
+</html>

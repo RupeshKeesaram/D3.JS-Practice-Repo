@@ -1,78 +1,191 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- !-- D3 CDN -->
-    <script src="https://d3js.org/d3.v7.min.js"></script>
+  <!-- !-- D3 CDN -->
+  <script src="https://d3js.org/d3.v7.min.js"></script>
 
+  <!-- d3 legend -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.min.js"></script>
 
-    <title>Top Left Bottom Right Axes Using D3</title>
+  <title>Top Left Bottom Right Axes Using D3</title>
 
-    <style>
-        .container{
-            display: flex;
-            margin: 5px;
-            padding:20px;
-            gap: 10px;
-            justify-content: center;
-        }
+  <style>
+    .container {
+      display: flex;
+      margin: 5px;
+      padding: 20px;
+      gap: 10px;
+      justify-content: center;
+    }
 
-        .add{
-            stroke:"red";
-            stroke-width: 5px;
-            
-        }
-    </style>
+    .add {
+      stroke: "red";
+      stroke-width: 5px;
+    }
+
+    .legend rect {
+      fill: white;
+      stroke: black;
+      opacity: 0.8;
+    }
+
+    .tooltip {
+      position: absolute;
+      padding: 5px;
+      border-radius: 2px;
+      pointer-events: none;
+      background: #000;
+      color: #fff;
+      margin: 2px;
+    }
+  </style>
 </head>
+
 <body>
-    <script>
-        var data = [{"temp":14.6,"sales":245,"hue":10},{"temp":20.5,"sales":405,"hue":5},
-        {"temp":5.6,"sales":220,"hue":3},{"temp":23.5,"sales":305,"hue":40}]
+  <script>
 
-        var width=800, height=500, spaccing=100;
 
-        var minTemp = d3.min(data,(d)=>{return d.temp});
-        var maxTemp = d3.max(data,(d)=>{return d.temp});
+    var data = [
+      { temp: 14.6, sales: 245, hue: 10 },
+      { temp: 20.5, sales: 405, hue: 5 },
+      { temp: 5.6, sales: 220, hue: 3 },
+      { temp: 23.5, sales: 305, hue: 40 },
+    ];
 
-        var minSales = d3.min(data,(d)=>{return d.sales});
-        var maxSales = d3.max(data,(d)=>{return d.sales});
+    var width = 800,
+      height = 500,
+      spaccing = 100;
 
-        var minHue = d3.min(data,(d)=>{return d.hue});
-        var maxHue = d3.max(data,(d)=>{return d.hue});
+    var minTemp = d3.min(data, (d) => {
+      return d.temp;
+    });
+    var maxTemp = d3.max(data, (d) => {
+      return d.temp;
+    });
 
-        // creating linearScales for axes 
-        var xScale = d3.scaleLinear().domain([minTemp-5,maxTemp+5]).range([0,width-spaccing]);
+    var minSales = d3.min(data, (d) => {
+      return d.sales;
+    });
+    var maxSales = d3.max(data, (d) => {
+      return d.sales;
+    });
 
-        var yScale = d3.scaleLinear().domain([minSales-100,maxSales+100]).range([height-spaccing,0]);
+    var minHue = d3.min(data, (d) => {
+      return d.hue;
+    });
+    var maxHue = d3.max(data, (d) => {
+      return d.hue;
+    });
 
-        var colorScale = d3.scaleSequential().domain([minHue,maxHue]).interpolator(d3.interpolateRainbow);
+    // creating linearScales for axes
+    var xScale = d3
+      .scaleLinear()
+      .domain([minTemp - 5, maxTemp + 5])
+      .range([0, width - spaccing]);
 
-        console.log(colorScale(10));
-        var xAxis = d3.axisBottom(xScale);
-        var yAxis = d3.axisLeft(yScale);
+    var yScale = d3
+      .scaleLinear()
+      .domain([minSales - 100, maxSales + 100])
+      .range([height - spaccing, 0]);
 
-        var svg = d3.select("body").append("svg").attr("width",width)
-                                    .attr("height",height)
-                                    .style("background","white")
-                                    .append("g").classed("main",true).attr("transform","translate("+spaccing/2+","+spaccing/2+")");
+    var colorScale = d3
+      .scaleSequential()
+      .domain([minHue, maxHue])
+      .interpolator(d3.interpolateRainbow);
 
-        // svg.append("g").attr("transform","translate(0,"+height-spaccing+")").call(xAxis);
-        svg.append("g").attr("transform","translate(30,"+(height-spaccing)+")").call(xAxis);
+    var xAxis = d3.axisBottom(xScale);
+    var yAxis = d3.axisLeft(yScale);
 
-        svg.append("g").attr("transform","translate(0,0)").call(yAxis);
+    var svg = d3
+      .select("body")
+      .append("svg")
+      .attr("width", width)
+      .attr("height", height)
+      .style("background", "gray");
 
-        svg.selectAll("circle").data(data).enter().append("circle")
-                            .attr("cx",(d)=>{return xScale(d.temp)})
-                            .attr("cy",(d)=>{return yScale(d.sales)})
-                            .attr("r",10)
-                            .style("fill",(d)=>{return colorScale(d.hue)});
+    var svg_g = svg
+      .append("g")
+      .classed("main", true)
+      .attr(
+        "transform",
+        "translate(" + spaccing / 2 + "," + spaccing / 2 + ")"
+      );
 
-        // Line to add X & Y axis
-        svg.append("line").attr("x1",0).attr("x2",30).attr("y1",400).attr("y2",400).style("stroke","black");
-        // svg.append("path").attr("d","M0 400 h30 v2").classed("add",true);
-    </script>
+    // svg.append("g").attr("transform","translate(0,"+height-spaccing+")").call(xAxis);
+    svg
+      .append("g")
+      .attr("transform", "translate(30," + (height - spaccing / 2) + ")")
+      .call(xAxis)
+      .classed("xAxis", true);
+
+    svg
+      .append("g")
+      .attr("transform", "translate(30," + spaccing / 2 + ")")
+      .call(yAxis).classed("yAxis", true);
+
+    var circles = svg_g
+      .selectAll("circle")
+      .data(data)
+      .enter()
+      .append("circle")
+      .attr("cx", (d) => {
+        return xScale(d.temp);
+      })
+      .attr("cy", (d) => {
+        return yScale(d.sales);
+      })
+      .attr("r", 10)
+      .style("fill", (d) => {
+        return colorScale(d.hue);
+      });
+
+    // // Line to add X & Y axis
+    // svg.append("line").attr("x1",0).attr("x2",30).attr("y1",400).attr("y2",400).style("stroke","black");
+    // svg.append("path").attr("d","M0 400 h30 v2").classed("add",true);
+
+    var zoom = d3.zoom().on("zoom", handlezoom);
+
+    function handlezoom(e) {
+      svg_g.attr("transform", e.transform);
+      d3.select(".xAxis").call(xAxis.scale(e.transform.rescaleX(xScale)));
+      d3.select(".yAxis").call(yAxis.scale(e.transform.rescaleY(yScale)));
+    }
+
+    svg.call(zoom);
+
+    // Define the div for the tooltip
+    var tip = d3.select("body").append("div")
+      .attr("class", "tooltip")
+      .style("opacity", 0)
+    // Add events to circles
+    circles.on("mouseover", function (e,d) {
+      console.log(e);
+      console.log(d);
+      tip.style("opacity", 1)
+        .html("Temp : "+d.temp+"<br> Sales : "+d.sales+"<br> hue : "+d.hue)
+        .style("left", (e.pageX - 25) + "px")
+        .style("top", (e.pageY - 75) + "px")
+    })
+      .on("mouseout", function (d) {
+        tip.style("opacity", 0)
+      })
+
+
+      var legend = d3.legendColor()
+    .scale(colorScale);
+
+    svg.append("g")
+    .attr("transform", "translate("+(width-100)+",10)")
+    .call(legend);
+0
+1
+
+  </script>
 </body>
+
 </html>

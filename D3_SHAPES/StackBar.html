@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- !-- D3 CDN -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
+
+    <title>STACK BAR USING D3</title>
+</head>
+<body>
+
+    <script>
+        var data = [{desktops: 80, laptops: 210, printers: 50, monitors:60},
+                    {desktops: 130, laptops: 150, printers: 30, monitors:40},
+                    {desktops: 40, laptops: 200, printers: 45, monitors:80},
+                    {desktops: 70, laptops: 180, printers: 65, monitors:70},
+                    {desktops: 100, laptops: 160, printers: 70, monitors:40},
+                    {desktops: 90, laptops: 190, printers: 80, monitors:60}];
+
+        // console.log(Object.keys(data[0]));
+
+        var width=1000,height=600;
+        var margin ={left:30,right:30,top:30,bottom:30};
+
+        // var colors = d3.scaleOrdinal().domain(Object.keys(data[0]))
+        //                 .interpolate(["#1f77b4","#ff7f0e","#2ca02c","#d62728"]);
+
+        var colors = ["indigo", "silver", "pink", "purple"];
+
+        var ordinalScale = d3.scaleOrdinal().domain(Object.keys(data)).range(["red","blue","green","yellow"]);
+
+        var svg = d3.select("body").append("svg")
+                    .attr("width",`${width-margin.left-margin.right}`)
+                    .attr("height",`${height-margin.top-margin.bottom}`)
+                    .style("background","white");
+
+
+        var svg_g=svg.append("g").attr("transform","translate("+`${margin.left+margin.right}`+","+`${margin.top+margin.bottom}`+")");
+        
+
+        var stack = d3.stack().keys(["desktops", "laptops", "printers", "monitors"])
+        // console.log(data)
+        // console.log("---------------------------------------");
+        // console.log(stack(data));
+
+
+        var series = svg_g.selectAll("g").data(stack(data))
+                        .enter().append("g")
+                        .style("fill",(d)=>{return ordinalScale(d["key"])});
+        
+
+        series.selectAll("rect").data((d)=>{return d}).enter()
+                    .append("rect").attr("height",35)
+                    .attr("width",(d)=>{return d[1]-d[0]})
+                    .attr("x",(d)=>{return d[0];})
+                    .attr("y",(d,i)=>{return i*60})
+                    .on("mouseover",(e,d)=>{
+                        d3.select(e.target).attr("height",40);
+                        console.log(d3.pointer(event));
+                    })
+                    .on("mouseout",(e,d)=>{
+                        d3.select(e.target).attr("height",35);
+
+                    })
+                    .on("mouseup",(e,d)=>{
+                        // console.log(e.path[1]);
+                        d3.select(e.path[1]).append("text").text((d)=>{console.log(d['key'])});
+                    });
+
+
+    </script>
+    
+</body>
+</html>

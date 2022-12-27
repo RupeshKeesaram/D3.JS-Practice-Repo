@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- !-- D3 CDN -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
+
+    <title>Line Generator in D3</title>
+
+    <style>
+        path
+          {
+              fill:none;
+              stroke:deeppink;
+              stroke-width:2;
+          }
+    </style>
+</head>
+<body>
+    <script>
+        var points = [ /*[0, 20], [100, 250], [260, 90], [450, 40], [450, 140]*/
+            [100, 300], [250, 50], [400, 300], [100, 150], [400, 150], [100, 300]];
+        var data = [{x:100, y:100}, {x:130, y:260}, {x:300, y:460}, {x:500, y:250}]
+            
+        var data1 = [{point:100}, {point:150}, {point:80}, {point:220}, {point:130}];
+
+        var width =800, height=500;
+        var svg = d3.select("body").append("svg").attr("width",width).attr("height",height).style("background","pink");
+
+        var line = d3.line().x((d)=>{return d.x;}).y((d)=>{return d.y;});
+
+        var line1 = d3.line().x((d)=>{return d.point;})
+                                .y((d,i)=>{return i*50;})
+
+       /* var line2 = d3.line().x((d)=>{return d.point;})
+                            .y((d,i)=>{return i*50;})
+                            .curve(d3.curveBasis);  */
+
+        var line3 = d3.line().x((d)=>{return d.point;})
+                            .y((d,i)=>{return i*50;})
+                            .curve(d3.curveBundle);
+
+        //  there are other curves as well curveCardinal, curveStep, curevBasisClosed,curveCardinalClosed and etc.
+
+        
+        // svg.append("path").attr("d",line(points));
+
+        // svg.append("path").attr("d",line(data));
+
+        svg.append("path").attr("d",line3(data1));
+
+    </script>
+</body>
+</html>

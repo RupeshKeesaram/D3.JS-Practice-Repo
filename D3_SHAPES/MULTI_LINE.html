@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- !-- D3 CDN -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
+
+    <title>Multi Line Graph Using D3</title>
+
+    <style>
+        path
+          {
+              fill:none;
+              stroke:deeppink;
+              stroke-width:2;
+          }
+    </style>
+</head>
+<body>
+    <script>
+        var points = [[100, 200], [150, 250], [200, 300], [300, 150]];
+        var data = [{x:100, y:100}, {x:130, y:260}, {x:300, y:460}, {x:500, y:250}]
+            
+        var data1 = [{point:100}, {point:150}, {point:80}, {point:220}, {point:130}];
+
+        var width = 800, height = 500, spaccing = 60;
+        var xscale = d3.scaleLinear().domain([0,700]).range([0,width-spaccing]);
+        var yscale = d3.scaleLinear().domain([0,700]).range([height-spaccing,0]);
+
+        var xaxis = d3.axisBottom(xscale);
+        var yaxis = d3.axisLeft(yscale);
+
+        var svg = d3.select("body").append("svg").attr("width",width).attr("height",height)
+                                .style("background","lightgreen").append("g").attr("transform","translate("+(spaccing/2)+","+(spaccing/2)+")");
+
+        svg.append("g").attr("transform","translate(0,"+(height-spaccing)+")").call(xaxis);
+        svg.append("g").attr("transform","translate(0,0)").call(yaxis);
+
+        var line1 = d3.line().x((d)=>{return xscale(d.x);})
+                            .y((d)=>{return yscale(d.y);});
+
+        var line2 = d3.line().x((d)=>{return xscale(d[0]);})
+                            .y((d)=>{return yscale(d[1]);});
+
+        console.log(xscale(100));
+        console.log(yscale(10));
+
+        svg.append("path").attr("d",line1(data));
+        svg.append("path").attr("d",line2(points)).style("stroke","red");
+    </script>
+</body>
+</html>

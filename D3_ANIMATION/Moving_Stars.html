@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- !-- D3 CDN -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
+
+    <title>Moving Stars Using D3</title>
+
+    <style>
+
+    </style>
+</head>
+<body>
+    <script>
+
+        let data =[];
+
+        var width=1200,height=550,spacing=60;
+
+        function random(x)
+        {
+            return Math.ceil(Math.random()*x);
+        }
+
+
+        function getData(num)
+        {
+            data=[];
+            for(i=0;i<num;i++)
+            {
+                data.push({
+                    "x0":random(width-100),
+                    "x1":random(width-100),
+                    "y0":random(height-100),
+                    "y1":random(height-100)
+                })
+            }
+        }
+
+        
+
+        var svg = d3.select("body").append("svg").attr("width",width).attr("height",height)
+                                    .style("background","pink");
+
+
+        var g = svg.append("g").attr("transform","translate("+(spacing/2)+","+(spacing/2)+")");
+
+        var colorScale = d3.scaleOrdinal(d3.schemeDark2);
+
+
+        function updateGraph(){
+            
+            var star = d3.symbol().type(d3.symbolStar).size(500);
+            getData(50);
+
+            g.selectAll("path").data(data).join(
+                function(enter)
+                {
+                    return enter.append("path")
+                        .attr("transform",(d)=>{return "translate("+d.x0+","+d.y0+")"})
+                        .style("opacity",0.5)
+                        .transition().duration(5000).ease(d3.easeLinear)
+                        .attr("transform",(d)=>{return "translate("+d.x1+","+d.y1+")"})
+                        .style("opacity",1);
+                },function(update)
+                {
+                    return update.style("opacity",1);
+                },function(exit)
+                {
+                    return exit.remove();
+                }
+            ).attr("d",star).style("fill",(d,i)=>{return colorScale(i)});
+        }
+        updateGraph();
+
+    </script>
+</body>
+</html>

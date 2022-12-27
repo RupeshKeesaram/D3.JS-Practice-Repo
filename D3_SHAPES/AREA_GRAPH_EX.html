@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- !-- D3 CDN -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
+    <title>Area Graph Example</title>
+
+    <style>
+        .area{
+            fill:deeppink;
+            stroke:yellow;
+            stroke-width: 2px;
+        }
+    </style>
+</head>
+<body>
+    <script>
+    var data =[{"year":2010,"profit":2000000},
+                {"year":2011,"profit":1500000},
+                {"year":2012,"profit":1800000},
+                {"year":2013,"profit":2400000},
+                {"year":2014,"profit":400000}];
+
+    var width=800,height=500,spaccing=80;
+
+    function findMin(d,col){
+        return d3.min(data,(d)=>{return d[col]});
+    }
+
+    function findMax(d,col){
+        return d3.max(data,(d)=>{return d[col]});
+    }
+
+    // console.log(findMax(data,"year"));
+
+    var xscale = d3.scaleLinear().domain([findMin(data,"year"),findMax(data,"year")]).range([0,width-spaccing]);
+
+    var yscale = d3.scaleLinear().domain([findMin(data,"profit"),findMax(data,"profit")]).range([height-spaccing,0]);
+
+    var xAxis = d3.axisBottom(xscale).tickFormat((d)=>{return d}).ticks(5);
+    var yAxis = d3.axisLeft(yscale).tickFormat((d)=>{return (d/1000000)+"M"});
+
+    var svg = d3.select("body").append("svg").attr("width",width).attr("height",height)
+                                .style("background","lightgreen").append("g")
+                                .attr("transform","translate("+(spaccing/2)+","+(spaccing/2)+")");
+    
+    //  Adding X & Y Axis
+    svg.append("g").attr("transform","translate(10,"+(height-spaccing)+")").call(xAxis);
+    svg.append("g").attr("transform","translate(0,0)").call(yAxis);
+
+    var area = d3.area().x((d)=>{return xscale(d.year)})
+                        .y0((height-spaccing))
+                        .y1((d)=>{return yscale(d.profit)});
+
+    svg.append("path").attr("d",area(data)).classed("area",true).attr("transform","translate(10,-10)");
+
+
+    // Line to merge x and y axis
+    var line = d3.line().x((d)=>{return d[0]})
+                        .y((d)=>{return d[1]});
+
+                        
+    var lineData = [[0,(height-spaccing)],[30,(height-spaccing)]];
+    svg.append("path").attr("d",line(lineData)).style("stroke","black");
+    </script>
+</body>
+</html>
