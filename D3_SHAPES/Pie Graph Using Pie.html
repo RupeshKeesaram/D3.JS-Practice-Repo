@@ -9,7 +9,7 @@
     <!-- !-- D3 CDN -->
     <script src="https://d3js.org/d3.v7.min.js"></script>
 
-    <title>Arcs Using D3</title>
+    <title>Pie chart using Pie in D3</title>
 </head>
 
 <body>
@@ -64,6 +64,7 @@
         //     .outerRadius(200);
 
 
+
         var pie = svg_g.append("g").attr("transform", "translate(300,200)")
             .selectAll("path").data(data)
             .enter().append("path")
@@ -72,7 +73,7 @@
             .on("mouseover", (e, d) => {
                 var samp = d3.arc()
                     .innerRadius(0)
-                    .outerRadius(250)
+                    .outerRadius(225)
                     .padRadius(0.5)
                     .padAngle(50)
                     .cornerRadius(5);
@@ -89,11 +90,30 @@
             });
 
 
+        //  Adding text for pie charts
         var content = svg_g.selectAll("text").data(data);
         content.enter().append("text").each(function (d,i) {
             var center = segment.centroid(d);
             d3.select(this).attr("x", center[0]).attr("y", center[1]).attr("dx", "-10px").text(i).attr("transform", "translate(300,200)");
         });
+
+
+        //  Adding color legend to the pie chart
+
+        var legends = svg.append("g").attr("transform","translate("+(width-400)+","+(100)+")").selectAll(".legends").data(data);
+
+        var legend = legends.enter().append("g").classed("legends",true).attr("transform",(d,i)=>{
+            return "translate("+(0)+","+((i+1)*30)+")"
+        })
+
+        legend.append("rect").attr("width",20).attr("height",20).attr("fill",(d,i)=>{return colorScale(i)});
+
+        legend.append("text").text((d,i)=>{console.log(d);return d.data})
+                .attr("fill",(d,i)=>{return colorScale(i)})
+                .attr("x","30")
+                .attr("y","15")
+
+
     </script>
 </body>
 
